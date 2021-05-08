@@ -12,6 +12,10 @@ const pool = new Pool({
 
 const port = 3000;
 
+router.get("/api/status", async (ctx) => {
+    ctx.body = "ok";
+});
+
 router.get("/api/pairs", async (ctx) => {
     const { rows } = await pool.query(
         "SELECT DISTINCT pair FROM transactions ORDER BY pair",

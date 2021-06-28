@@ -14,6 +14,7 @@ const port = 3000;
 
 router.get("/api/status", async (ctx) => {
     ctx.body = "ok";
+    ctx.body = pool;
 });
 
 router.get("/api/pairs", async (ctx) => {
@@ -51,6 +52,7 @@ async function computeTotalProfit() {
 
     for (let i = 0; i < pairs.length; ++i) {
         const profit = await computeProfit(pairs[i].pair);
+        if (Object.prototype.hasOwnProperty.call(profit, "error")) { return (pairs[i]); }
         total += profit["total"] as number;
     }
     result["total"] = total;
@@ -68,7 +70,7 @@ async function computeProfit(pair: string) {
         result["error"] = "pair does not exist";
         return (result);
     }
-    for (; rows.length > 0 && rows[i].type.toLowerCase() != "buy"; ++i);
+    for (; i < rows.length && rows[i].type.toLowerCase() != "buy"; ++i);
     for (; i < rows.length; ++i) {
         if (rows[i].type.toLowerCase() === "buy") {
             buy = rows[i].close_price;

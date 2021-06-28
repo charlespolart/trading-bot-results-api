@@ -16,7 +16,7 @@ router.get("/api/status", async (ctx) => {
     ctx.body = "ok";
 });
 
-router.get("/api/getPair", async (ctx) => {
+router.get("/api/pairs", async (ctx) => {
     ctx.body = await queryGetPair();
 });
 
@@ -68,12 +68,12 @@ async function computeProfit(pair: string) {
         result["error"] = "pair does not exist";
         return (result);
     }
-    for (; rows.length > 0 && rows[i].type != "buy"; ++i);
+    for (; rows.length > 0 && rows[i].type.toLowerCase() != "buy"; ++i);
     for (; i < rows.length; ++i) {
-        if (rows[i].type === "buy") {
+        if (rows[i].type.toLowerCase() === "buy") {
             buy = rows[i].close_price;
         }
-        else if (rows[i].type === "sell" && buy !== 0.0) {
+        else if (rows[i].type.toLowerCase() === "sell" && buy !== 0.0) {
             const sell = rows[i].close_price;
             const profit = (sell - buy) / buy * 100.0;
             total += profit;

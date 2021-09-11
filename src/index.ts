@@ -34,7 +34,12 @@ async function queryGetPair(): Promise<QueryResultRow> {
         "SELECT DISTINCT pair FROM transactions ORDER BY pair",
         []
     );
-    return (rows);
+    const result = [];
+
+    for (let i = 0; i < rows.length; ++i) {
+        result.push(await computeProfit(rows[i]["pair"]));
+    }
+    return (result);
 }
 
 async function queryGetTransactions(pair: string): Promise<QueryResultRow> {
